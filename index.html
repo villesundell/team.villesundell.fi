@@ -16,12 +16,32 @@
             color: #333;
         }
     </style>
+
+    <script>
+        //<![CDATA[
+        function updateEmail () {
+            var mailaddr = "team" + "@" + "villesundell" + ".fi";
+            document.getElementById("temptable").innerHTML = "";
+            document.getElementById("mailbox").innerHTML = "<a href=\"mailto:"+mailaddr+"\">"+mailaddr+"</a>";
+        }
+        //]]>
+    </script>
 </head>
-<body>
+<body onload="updateEmail()">
 
     <h1>Team Ville Sundell</h1>
     <h2>Ville Sundellin tukiryhmä vaaleihin</h2>
     <p>Tämä on kotisivu Team Ville Sundellille, joka on vaalirahoituslain (2009/273) mukainen rekisteröimätön ehdokkaan tukiryhmä.</p>
+
+    <p id="mailbox">
+
+    </p>
+
+    <table id="temptable">
+        <tr>
+            <td>team</td><td> at </td><td>villesundell</td><td>.</td><td>fi</td>
+        </tr>
+    </table>
 
 </body>
 </html>
