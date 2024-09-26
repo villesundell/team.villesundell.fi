@@ -7,20 +7,12 @@
         function showSpeeches() {
             var speeches = JSON.parse(localStorage.getItem('speeches'));
 
-            document.getElementById('speeches').innerHTML = "";
+            document.getElementById('speeches').innerHTML = '';
             for (const speech of speeches) {
                 var tr = document.createElement('tr');
-                tr.innerHTML = "<td>" + speech.videoId + "</td><td>" + speech.aloitusAika + "</td><td>" + speech.lopetusAika + "</td><td>" + speech.nimi + "</td>";
+                tr.innerHTML = '<td>' + speech.videoId + '</td><td>' + speech.aloitusAika + '</td><td>' + speech.lopetusAika + '</td><td>' + speech.nimi + '</td>';
                 document.getElementById('speeches').insertAdjacentElement('afterbegin', tr);
             }
-        }
-
-        function deleteLatest() {
-            var speeches = JSON.parse(localStorage.getItem('speeches'));
-            speeches.pop();
-            localStorage.setItem('speeches', JSON.stringify(speeches));
-
-            showSpeeches();
         }
     </script>
 </head>
@@ -43,7 +35,7 @@
 
     <br><br>
 
-    <button id="speechButton">Aloita puheenvuoro</button> <button onClick="deleteLatest()">Poista viimeisin</button> <button id="exportButton">Lataa JSON</button>
+    <button id="speechButton">Aloita puheenvuoro</button> <button id="deleteButton">Poista viimeisin</button> <button id="exportButton">Lataa JSON</button>
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
@@ -112,6 +104,14 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('deleteButton').addEventListener('click', function() {
+            var speeches = JSON.parse(localStorage.getItem('speeches'));
+            speeches.pop();
+            localStorage.setItem('speeches', JSON.stringify(speeches));
+
+            showSpeeches();
         });
     </script>
 
