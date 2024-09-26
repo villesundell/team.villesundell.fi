@@ -9,7 +9,9 @@
 
             document.getElementById('speeches').innerHTML = "";
             for (const speech of speeches) {
-                document.getElementById('speeches').innerHTML += "<tr><td>" + speech.videoId + "</td><td>" + speech.aloitusAika + "</td><td>" + speech.lopetusAika + "</td><td>" + speech.nimi + "</td></tr>";
+                var tr = document.createElement('tr');
+                tr.innerHTML = "<td>" + speech.videoId + "</td><td>" + speech.aloitusAika + "</td><td>" + speech.lopetusAika + "</td><td>" + speech.nimi + "</td>";
+                document.getElementById('speeches').insertAdjacentElement('afterbegin', tr);
             }
         }
 
