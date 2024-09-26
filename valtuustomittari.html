@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Valtuuston puheenvuorojen tallennus</title>
+    <script>
+        function showSpeeches() {
+            var speeches = JSON.parse(localStorage.getItem('speeches'));
+
+            document.getElementById('speeches').innerHTML = "";
+            for (const speech of speeches) {
+                document.getElementById('speeches').innerHTML += "<tr><td>" + speech.videoId + "</td><td>" + speech.aloitusAika + "</td><td>" + speech.lopetusAika + "</td><td>" + speech.nimi + "</td></tr>";
+            }
+        }
+
+        function deleteLatest() {
+            var speeches = JSON.parse(localStorage.getItem('speeches'));
+            speeches.pop();
+            localStorage.setItem('speeches', JSON.stringify(speeches));
+
+            showSpeeches();
+        }
+    </script>
+</head>
+<body onLoad="showSpeeches()">
+    <h1>Valtuuston puheenvuorojen tallennus</h1>
+
+    <label for="videoSelect">Valitse video:</label>
+    <select id="videoSelect">
+        <option value="fPK33E7aHrY">Video 1</option>
+        <option value="v9jXONvX2js">Video 2</option>
+        <option value="1tHHUfibDhk">Video 3</option>
+    </select>
+
+    <div id="player"></div>
+
+    <br>
+
+    <label for="nameInput">Valtuutetun nimi:</label>
+    <input type="text" id="nameInput">
+
+    <br><br>
+
+    <button id="speechButton">Aloita puheenvuoro</button> <button onClick="deleteLatest()">Poista viimeisin</button> <button id="exportButton">Lataa JSON</button>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        var player;
+        var speechStarted = false;
+        var speechStartTime = 0;
+        var speechEndTime = 0;
+
+        // Ladataan YouTube IFrame Player API
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '360',
+                width: '640',
+                videoId: document.getElementById('videoSelect').value,
+            });
+        }
+
+        // Vaihdetaan videota pudotuslaatikosta
+        document.getElementById('videoSelect').addEventListener('change', function() {
+            var videoId = this.value;
+            player.loadVideoById(videoId);
+        });
+
+        // Tallennetaan puheenvuoron aloitus- ja lopetusaika
+        document.getElementById('speechButton').addEventListener('click', function() {
+            if (!speechStarted) {
+                speechStartTime = player.getCurrentTime();
+                speechStarted = true;
+                this.textContent = 'Lopeta puheenvuoro';
+            } else {
+                speechEndTime = player.getCurrentTime();
+                speechStarted = false;
+                this.textContent = 'Aloita puheenvuoro';
+
+                var name = document.getElementById('nameInput').value;
+                var speeches = JSON.parse(localStorage.getItem('speeches')) || [];
+
+                speeches.push({
+                    nimi: name,
+                    videoId: player.getVideoData().video_id,
+                    aloitusAika: speechStartTime,
+                    lopetusAika: speechEndTime
+                });
+
+                localStorage.setItem('speeches', JSON.stringify(speeches));
+
+                showSpeeches();
+            }
+        });
+
+        document.getElementById('exportButton').addEventListener('click', function() {
+            var speeches = JSON.parse(localStorage.getItem('speeches')) || [];
+            if (speeches.length === 0) {
+                alert('Ei tallennettuja puheenvuoroja.');
+                return;
+            }
+
+            var dataStr = JSON.stringify(speeches, null, 2); // Kaunisteltu JSON
+            var blob = new Blob([dataStr], { type: "application/json" });
+            var url = URL.createObjectURL(blob);
+
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'puheenvuorot.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+
+    <table border="3">
+        <thead>
+            <tr>
+                <th>Video ID</th>
+                <th>Aloitusaika</th>
+                <th>Lopetusaika</th>
+                <th>Puhuja</th>
+            </tr>
+        </thead>
+        <tbody id="speeches">
+            <tr><td>Puheita ladataan</td></tr>
+        </tbody>
+    </table>
+</body>
+</html>
