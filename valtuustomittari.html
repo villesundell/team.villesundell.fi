@@ -4,22 +4,36 @@
     <meta charset="UTF-8">
     <title>Valtuuston puheenvuorojen tallennus</title>
     <script>
+        let max_speeches = 10;
         function showSpeeches() {
-            var speeches = JSON.parse(localStorage.getItem('speeches'));
+            var speeches = JSON.parse(localStorage.getItem('speeches')).reverse();
+            var i = 0;
 
             document.getElementById('speeches').innerHTML = '';
             for (const speech of speeches) {
+                i++;
+                if (max_speeches > 0 && i > max_speeches) {
+                    document.getElementById('speeches').innerHTML += '<tr><td colspan="4">Vain ' + max_speeches + ' uusinta puhetta näytetään. <button onClick="showAll()">Näytä kaikki</button></td></tr>';
+                    break;
+                }
+
                 var tr = document.createElement('tr');
                 tr.innerHTML = '<td>' + speech.videoId + '</td><td>' + speech.aloitusAika + '</td><td>' + speech.lopetusAika + '</td><td>' + speech.nimi + '</td>';
-                document.getElementById('speeches').insertAdjacentElement('afterbegin', tr);
+                document.getElementById('speeches').append(tr);
             }
+        }
+
+        function showAll() {
+            max_speeches = 0;
+
+            showSpeeches();
         }
     </script>
 </head>
 <body onLoad="showSpeeches()">
     <h1>Valtuuston puheenvuorojen tallennus</h1>
 
-    <label for="videoSelect">Valitse video:</label>
+    <label for="videoSelect">Valtuuston kokous:</label>
     <select id="videoSelect">
         <option value="MhWGZdE_h6M">23.8.2021</option>
         <option value="EE_nfZAwFRU">20.9.2021</option>
@@ -144,6 +158,8 @@
             showSpeeches();
         });
     </script>
+
+    <br><br>
 
     <table border="3">
         <thead>
