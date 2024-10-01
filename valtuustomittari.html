@@ -63,7 +63,7 @@
 
     <br><br>
 
-    <button id="speechButton">Aloita puheenvuoro</button> <button id="deleteButton">Poista viimeisin</button> <button id="exportButton">Lataa JSON</button>
+    <button id="speechButton" style="background-color: lightgreen;">Aloita puheenvuoro</button> <button id="deleteButton">Poista viimeisin puhe</button> <button id="exportButton">Lataa puheet JSON:ina</button>
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
@@ -93,10 +93,12 @@
                 speechStartTime = player.getCurrentTime();
                 speechStarted = true;
                 this.textContent = 'Lopeta puheenvuoro';
+                this.style.background = 'red';
             } else {
                 speechEndTime = player.getCurrentTime();
                 speechStarted = false;
                 this.textContent = 'Aloita puheenvuoro';
+                this.style.background = 'lightgreen';
 
                 var name = document.getElementById('nameInput').value;
                 var speeches = JSON.parse(localStorage.getItem('speeches')) || [];
