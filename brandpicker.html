@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EGA Palette Selector</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .color-card {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .swatch {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #000;
+            flex-shrink: 0;
+        }
+
+        .info {
+            flex-grow: 1;
+        }
+
+        .color-name {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        button {
+            cursor: pointer;
+            font-size: 0.7rem;
+            padding: 4px;
+            border: 1px solid #333;
+            background: #eee;
+            text-align: left;
+        }
+
+        button:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>EGA 16-Color Palette</h1>
+
+    <div class="palette-grid" id="palette">
+        </div>
+
+    <script>
+        const egaColors = [
+            { name: "Black", hex: "#000000" },
+            { name: "Blue", hex: "#0000AA" },
+            { name: "Green", hex: "#00AA00" },
+            { name: "Cyan", hex: "#00AAAA" },
+            { name: "Red", hex: "#AA0000" },
+            { name: "Magenta", hex: "#AA00AA" },
+            { name: "Brown", hex: "#AA5500" },
+            { name: "White (Light Gray)", hex: "#AAAAAA" },
+            { name: "Gray (Dark Gray)", hex: "#555555" },
+            { name: "Bright Blue", hex: "#5555FF" },
+            { name: "Bright Green", hex: "#55FF55" },
+            { name: "Bright Cyan", hex: "#55FFFF" },
+            { name: "Bright Red", hex: "#FF5555" },
+            { name: "Bright Magenta", hex: "#FF55FF" },
+            { name: "Bright Yellow", hex: "#FFFF55" },
+            { name: "Bright White", hex: "#FFFFFF" }
+        ];
+
+        const paletteContainer = document.getElementById('palette');
+
+        egaColors.forEach(color => {
+            const card = document.createElement('div');
+            card.className = 'color-card';
+            
+            card.innerHTML = `
+                <div class="swatch" style="background-color: ${color.hex};"></div>
+                <div class="info">
+                    <span class="color-name">${color.name}</span>
+                    <code>${color.hex}</code>
+                </div>
+                <div class="controls">
+                    <button onclick="console.log('Set BG: ${color.hex}')">SET BG</button>
+                    <button onclick="console.log('Set TEXT: ${color.hex}')">SET TEXT</button>
+                    <button onclick="console.log('Set ACCENT: ${color.hex}')">SET ACCENT</button>
+                </div>
+            `;
+            
+            paletteContainer.appendChild(card);
+        });
+    </script>
+</body>
+</html>
