@@ -5,18 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EGA Palette Selector</title>
     <style>
+        :root {
+            --my-background: #f0f0f0;
+            --my-foreground: #333;
+            --my-accent: #FFFFFF;
+        }
+
+        @font-face {
+            font-family: "HORIZON1994";
+            src: url("horizon1994-large-corrected.woff2");
+            font-smooth: never;
+            -webkit-font-smoothing: none;
+        }
+
+        @font-face {
+            font-family: "Courier Prime";
+            src: url("CourierPrime-Regular.ttf");
+        }
+
+        @font-face {
+            font-family: "MONKEY.000";
+            src: url("MONKEY.000.ttf");
+        }
+
+        @font-palette-values --DefaultPalette {
+            font-family: "MONKEY.000";
+            override-colors: 0 #FFFFFF;
+        }
+
         body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f0f0f0;
+            font-family: "MONKEY.000", "Courier Prime", Courier, monospace;
+            background-color: var(--my-background);
             padding: 20px;
-            color: #333;
+            color: var(--my-foreground);
+            font-palette: --DefaultPalette;
         }
 
         h1 {
+            font-family: "HORIZON1994";
             text-align: center;
             text-transform: uppercase;
-            border-bottom: 2px solid #000;
             padding-bottom: 10px;
+            font-weight: normal;
+            font-style: normal;
+            background-color: var(--my-accent);
         }
 
         .palette-grid {
@@ -28,6 +60,7 @@
         }
 
         .color-card {
+            font-family: "Courier Prime";
             background: white;
             border: 1px solid #ccc;
             padding: 10px;
@@ -76,7 +109,7 @@
 </head>
 <body>
 
-    <h1>VILLE SUNDELL</h1>
+    <h1>VILLE SUNDELL - DIGIVIHREÄ</h1>
 
     <p style="text-align:center;">Leipäteksti</p>
 
@@ -116,9 +149,9 @@
                     <code>${color.hex}</code>
                 </div>
                 <div class="controls">
-                    <button onclick="setBg('${color.hex}')">SET BG</button>
-                    <button onclick="setFontColor('${color.hex}')">SET TEXT</button>
-                    <button onclick="setAccent('${color.hex}')">SET ACCENT</button>
+                    <button onclick="setBg('${color.hex}')">TAUSTA</button>
+                    <button onclick="setFontColor('${color.hex}')">EDUSTA</button>
+                    <button onclick="setAccent('${color.hex}')">KOROSTUS</button>
                 </div>
             `;
             
@@ -126,18 +159,38 @@
         });
 
         function setBg(color) {
-            document.body.style.background = color;
+            document.documentElement.style.setProperty("--my-background", color);
             console.log('Set BG:' + color)
         }
 
         function setFontColor(color) {
-            document.body.style.color = color;
+            document.documentElement.style.setProperty("--my-foreground", color);
             console.log('Set Font color:' + color)
         }
 
         function setAccent(color) {
-            document.body.style.color = color;
+            document.documentElement.style.setProperty("--my-accent", color);
+            applyPaletteOverride(color);
+
             console.log('Set Font color:' + color)
+        }
+
+        function applyPaletteOverride(color) {
+            // Check if we already created an override tag, otherwise create one
+            let styleTag = document.getElementById("font-palette-override");
+            if (!styleTag) {
+                styleTag = document.createElement("style");
+                styleTag.id = "font-palette-override";
+                document.head.appendChild(styleTag);
+            }
+
+            // Set the content (this overwrites previous attempts)
+            styleTag.textContent = `
+                @font-palette-values --DefaultPalette {
+                    font-family: "MONKEY.000";
+                    override-colors: 0 ${color};
+                }
+            `;
         }
     </script>
 </body>
