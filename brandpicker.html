@@ -76,7 +76,9 @@
 </head>
 <body>
 
-    <h1>EGA 16-Color Palette</h1>
+    <h1>VILLE SUNDELL</h1>
+
+    <p style="text-align:center;">Leipäteksti</p>
 
     <div class="palette-grid" id="palette">
         </div>
@@ -109,19 +111,34 @@
             
             card.innerHTML = `
                 <div class="swatch" style="background-color: ${color.hex};"></div>
-                <div class="info">
+                <div class="info" style="color:black;">
                     <span class="color-name">${color.name}</span>
                     <code>${color.hex}</code>
                 </div>
                 <div class="controls">
-                    <button onclick="console.log('Set BG: ${color.hex}')">SET BG</button>
-                    <button onclick="console.log('Set TEXT: ${color.hex}')">SET TEXT</button>
-                    <button onclick="console.log('Set ACCENT: ${color.hex}')">SET ACCENT</button>
+                    <button onclick="setBg('${color.hex}')">SET BG</button>
+                    <button onclick="setFontColor('${color.hex}')">SET TEXT</button>
+                    <button onclick="setAccent('${color.hex}')">SET ACCENT</button>
                 </div>
             `;
             
             paletteContainer.appendChild(card);
         });
+
+        function setBg(color) {
+            document.body.style.background = color;
+            console.log('Set BG:' + color)
+        }
+
+        function setFontColor(color) {
+            document.body.style.color = color;
+            console.log('Set Font color:' + color)
+        }
+
+        function setAccent(color) {
+            document.body.style.color = color;
+            console.log('Set Font color:' + color)
+        }
     </script>
 </body>
 </html>
