@@ -9,6 +9,9 @@
             --my-background: #f0f0f0;
             --my-foreground: #333;
             --my-accent: #FFFFFF;
+
+            --h1-font: "HORIZON1994";
+            --text-font: "MONKEY.000";
         }
 
         @font-face {
@@ -34,7 +37,7 @@
         }
 
         body {
-            font-family: "MONKEY.000", "Courier Prime", Courier, monospace;
+            font-family: var(--text-font), "Courier Prime", Courier, monospace;
             background-color: var(--my-background);
             padding: 20px;
             color: var(--my-foreground);
@@ -42,7 +45,7 @@
         }
 
         h1 {
-            font-family: "HORIZON1994";
+            font-family: var(--h1-font);
             text-align: center;
             text-transform: uppercase;
             padding-bottom: 10px;
@@ -113,8 +116,11 @@
 
     <p style="text-align:center;">Leipäteksti</p>
 
-    <div class="palette-grid" id="palette">
-        </div>
+    <div class="palette-grid" id="palette"></div>
+
+    <h1>Fontit</h1>
+    <p>Testiteksti</p>
+    <div class="palette-grid" id="font"></div>
 
     <script>
         const egaColors = [
@@ -136,12 +142,18 @@
             { name: "Bright White", hex: "#FFFFFF" }
         ];
 
+        const fonts = [
+            {name: "Pelifontti", family: "MONKEY.000"},
+            {name: "Kirjoituskone", family: "Courier Prime"},
+            {name: "IBM", family: "HORIZON1994"}
+        ];
+
         const paletteContainer = document.getElementById('palette');
 
         egaColors.forEach(color => {
             const card = document.createElement('div');
             card.className = 'color-card';
-            
+
             card.innerHTML = `
                 <div class="swatch" style="background-color: ${color.hex};"></div>
                 <div class="info" style="color:black;">
@@ -154,8 +166,28 @@
                     <button onclick="setAccent('${color.hex}')">KOROSTUS</button>
                 </div>
             `;
-            
+
             paletteContainer.appendChild(card);
+        });
+
+        const fontContainer = document.getElementById('font');
+
+        fonts.forEach(font => {
+            const card = document.createElement('div');
+            card.className = 'color-card';
+
+            card.innerHTML = `
+                <div class="info" style="color:black; font-family: '${font.family}';">
+                    <span class="color-name">${font.name}</span>
+                    <code>${font.family}</code>
+                </div>
+                <div class="controls">
+                    <button onclick="setH1Font('${font.family}')">OTSIKKO</button>
+                    <button onclick="setTextFont('${font.family}')">LEIPÄTEKSTI</button>
+                </div>
+            `;
+
+            fontContainer.appendChild(card);
         });
 
         function setBg(color) {
@@ -173,6 +205,14 @@
             applyPaletteOverride(color);
 
             console.log('Set Font color:' + color)
+        }
+
+        function setH1Font(font) {
+            document.documentElement.style.setProperty("--h1-font", `"${font}"`);
+        }
+
+        function setTextFont(font) {
+            document.documentElement.style.setProperty("--text-font", `"${font}"`);
         }
 
         function applyPaletteOverride(color) {
